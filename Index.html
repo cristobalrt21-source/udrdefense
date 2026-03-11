@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UDRP Domains Defense Team UCN - Casos Reales</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            background: linear-gradient(145deg, #0b1a33 0%, #1a2f4e 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 25px 20px;
+        }
+
+        /* Estilo de la tarjeta principal (similar al contenedor del sitio de referencia) */
+        .main-card {
+            max-width: 1100px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 32px;
+            box-shadow: 0 25px 50px -10px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* Encabezado con el logo */
+        .header {
+            background: #0f1e32;
+            padding: 28px 35px;
+            border-bottom: 3px solid #ffaa33;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            font-size: 42px;
+            filter: drop-shadow(0 4px 4px rgba(0,0,0,0.3));
+        }
+
+        .logo-text {
+            font-size: 1.9rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: #ffffff;
+            text-shadow: 2px 2px 0 #1c3a5f;
+            line-height: 1.2;
+        }
+
+        .logo-text span {
+            color: #ffaa33;
+            font-weight: 800;
+            display: inline-block;
+        }
+
+        .logo-sub {
+            display: block;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            color: #b0c4de;
+            margin-top: 5px;
+            font-weight: 400;
+            text-shadow: none;
+        }
+
+        /* Título principal estilo "Centro de Consultas" */
+        .page-title {
+            background: #f0f4fa;
+            padding: 22px 35px;
+            border-bottom: 1px solid #cfddee;
+        }
+
+        .page-title h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: #0f1e32;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .page-title h1:before {
+            content: "⚖️";
+            font-size: 2.2rem;
+        }
+
+        .page-title .subhead {
+            color: #2c4b74;
+            font-size: 1.2rem;
+            margin-top: 8px;
+            font-weight: 400;
+            border-left: 5px solid #ffaa33;
+            padding-left: 20px;
+            background: rgba(255,170,51,0.05);
+            border-radius: 0 8px 8px 0;
+        }
+
+        /* Contenedor de las pestañas (filtros) */
+        .tabs-container {
+            background: #e9eef3;
+            padding: 0 30px;
+            border-bottom: 2px solid #bdd1e6;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .tab-button {
+            background: transparent;
+            border: none;
+            padding: 18px 22px 16px 22px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #1e3a5f;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-bottom: 4px solid transparent;
+            margin-bottom: -2px;
+            opacity: 0.8;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab-button:hover {
+            opacity: 1;
+            background: rgba(255,170,51,0.1);
+            border-bottom-color: #ffaa33;
+        }
+
+        .tab-button.active {
+            opacity: 1;
+            border-bottom-color: #0f1e32;
+            background: linear-gradient(transparent 70%, rgba(15,30,50,0.05));
+            font-weight: 700;
+            color: #0a1a2c;
+        }
+
+        /* Contenido principal similar a las "preguntas" del sitio de ejemplo */
+        .content-area {
+            padding: 35px;
+            background: #ffffff;
+        }
+
+        .cases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        /* Tarjetas de cada caso (estilo "artículo" de consulta) */
+        .case-card {
+            background: #f9fcff;
+            border-radius: 24px;
+            padding: 25px;
+            box-shadow: 0 8px 20px rgba(0,20,40,0.08);
+            border: 1px solid #dde5ed;
+            transition: transform 0.25s ease, box-shadow 0.3s;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .case-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 30px rgba(0, 35, 70, 0.15);
+            border-color: #ffaa33;
+        }
+
+        .case-card.selected {
+            border: 2px solid #ffaa33;
+            background: #fff9f0;
+            box-shadow: 0 0 0 4px rgba(255,170,51,0.2);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .card-number {
+            background: #0f1e32;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+            flex-shrink: 0;
+        }
+
+        .card-title {
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: #0f1e32;
+            line-height: 1.3;
+        }
+
+        .card-sub {
+            color: #ffaa33;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .case-description {
+            color: #2d425b;
+            line-height: 1.6;
+            margin: 15px 0 10px;
+            font-size: 1rem;
+            flex-grow: 1;
+        }
+
+        .read-more {
+            color: #0f1e32;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 15px;
+            border-top: 1px dashed #b0c9e0;
+            padding-top: 15px;
+        }
+
+        .read-more:after {
+            content: "→";
+            transition: margin 0.2s;
+        }
+
+        .case-card:hover .read-more:after {
+            margin-left: 8px;
+        }
+
+        /* Panel de detalle (cuando se selecciona un caso) */
+        .detail-panel {
+            background: #eef3f9;
+            border-radius: 28px;
+            margin-top: 35px;
+            padding: 30px;
+            border: 2px solid #ffaa33;
+            display: none;
+            animation: fadeSlide 0.3s ease-out;
+        }
+
+        @keyframes fadeSlide {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .detail-panel.visible {
+            display: block;
+        }
+
+        .detail-panel h2 {
+            color: #0f1e32;
+            font-size: 1.9rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .detail-panel h2 span {
+            background: #ffaa33;
+            padding: 5px 15px;
+            border-radius: 40px;
+            font-size: 1.1rem;
+            color: #0f1e32;
+        }
+
+        .detail-content {
+            font-size: 1.1rem;
+            color: #1a2f4e;
+            line-height: 1.7;
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+            margin-top: 15px;
+            border-left: 8px solid #0f1e32;
+        }
+
+        /* Adaptación a móviles */
+        @media (max-width: 680px) {
+            .header { padding: 20px; }
+            .logo-text { font-size: 1.5rem; }
+            .page-title h1 { font-size: 2rem; flex-wrap: wrap; }
+            .tabs-container { padding: 0 15px; }
+            .tab-button { padding: 14px 12px; font-size: 0.9rem; }
+            .content-area { padding: 20px; }
+            .cases-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-card">
+        <!-- Header con logo UDRP Domains defense team UCN -->
+        <div class="header">
+            <div class="logo">
+                <div class="logo-icon">🛡️</div>
+                <div class="logo-text">
+                    UDRP Domains defense team <span>UCN</span>
+                    <span class="logo-sub">Protegiendo tu identidad digital</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Título de la sección (inspirado en el sitio de ejemplo) -->
+        <div class="page-title">
+            <h1>CASOS REALES</h1>
+            <div class="subhead">Lecciones fundamentales sobre propiedad intelectual, dominios y marcas</div>
+        </div>
+
+        <!-- Pestañas de navegación principal (simulan las categorías del sitio original) -->
+        <div class="tabs-container" id="mainTabs">
+            <button class="tab-button active" data-tab="todos">📋 Todos los casos</button>
+            <button class="tab-button" data-tab="destacados">⭐ Más relevantes</button>
+            <button class="tab-button" data-tab="clientes">🤝 Historias clientes</button>
+        </div>
+
+        <!-- Área de contenido que cambia según pestaña (subpestañas) -->
+        <div class="content-area" id="contentArea">
+            <div class="cases-grid" id="casesGrid">
+                <!-- Cada caso se genera dinámicamente con JS pero incluimos estructura base para que se vea siempre -->
+            </div>
+            <!-- Panel de detalle que se muestra al hacer clic en un caso -->
+            <div class="detail-panel" id="detailPanel">
+                <h2 id="detailTitle">Selecciona un caso <span></span></h2>
+                <div class="detail-content" id="detailDescription">
+                    Haz clic en cualquier caso real para ver un análisis más detallado y la lección clave.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // Definición de los casos con sus títulos completos
+            const casos = [
+                {
+                    id: 1,
+                    numero: '1.1',
+                    titulo: 'El caso McDonalds y la ironía del periodista',
+                    descripcionCorta: 'Una de las primeras lecciones sobre falta de regulación en los 90.',
+                    detalle: '<strong>📌 La ironía del periodista:</strong> En los años 90, un periodista registró el dominio mcdonalds.com antes que la cadena, evidenciando el vacío legal sobre propiedad de dominios. McDonald’s solo pudo recuperarlo tras una larga disputa. Lección: registrar tu marca como dominio no es opcional, incluso para gigantes.',
+                    categoria: 'destacados'
+                },
+                {
+                    id: 2,
+                    numero: '1.2',
+                    titulo: 'Zoe Saldana: ¿Es tu nombre una marca?',
+                    descripcionCorta: 'Cómo los famosos protegen su identidad como "marcas no registradas".',
+                    detalle: '💡 La actriz Zoe Saldana ha protegido su nombre como marca no registrada (common law trademark) para evitar usos comerciales no autorizados. Aunque no siempre es necesario el registro formal, el uso comercial continuado otorga derechos. Lección: tu nombre puede ser tu marca, incluso sin registro, si lo usas profesionalmente.',
+                    categoria: 'destacados'
+                },
+                {
+                    id: 3,
+                    numero: '1.3',
+                    titulo: 'Calvin Klein vs. Calvjinklein',
+                    descripcionCorta: 'Por qué una sola letra añadida no es suficiente para diferenciar un dominio.',
+                    detalle: '🔤 El caso Calvjinklein vs Calvin Klein: una simple falta ortográfica (cambiar "i" por "j") fue considerada confusamente similar por la UDRP. La intención de desviar tráfico era clara. Lección: variaciones mínimas no evitan la infracción si buscan aprovechar el renombre de una marca.',
+                    categoria: 'destacados'
+                },
+                {
+                    id: 4,
+                    numero: '1.4',
+                    titulo: 'El caso "Save Me"',
+                    descripcionCorta: 'La importancia de registrar el dominio antes de que la marca exista.',
+                    detalle: '🆘 Una empresa llamada "Save Me" quiso lanzar una ONG pero el dominio ya estaba registrado por un particular. Aunque luego lo reclamaron, no pudieron probar mala fe porque el dominio era anterior al uso de la marca. Lección: si tienes un proyecto, registra el dominio primero, incluso antes de hacerlo público.',
+                    categoria: 'todos'
+                },
+                {
+                    id: 5,
+                    numero: '1.5',
+                    titulo: 'Historias de clientes',
+                    descripcionCorta: 'Experiencias reales de defensa de dominios con nuestro equipo UDRP.',
+                    detalle: '🤲 Clientes que evitaron la pérdida de sus dominios gracias a estrategias de marca defensiva. Por ejemplo, un emprendedor local pudo recuperar su dominio .cl tras demostrar uso anterior. Conoce cómo proteger tu activo digital antes de que sea demasiado tarde.',
+                    categoria: 'clientes'
+                }
+            ];
+
+            const grid = document.getElementById('casesGrid');
+            const detailPanel = document.getElementById('detailPanel');
+            const detailTitle = document.getElementById('detailTitle');
+            const detailDescription = document.getElementById('detailDescription');
+            const tabButtons = document.querySelectorAll('.tab-button');
+
+            // Función para renderizar casos según filtro
+            function renderCasos(filtro = 'todos') {
+                let casosFiltrados = casos;
+                if (filtro !== 'todos') {
+                    casosFiltrados = casos.filter(c => c.categoria === filtro);
+                }
+
+                let html = '';
+                casosFiltrados.forEach(caso => {
+                    html += `
+                        <div class="case-card" data-id="${caso.id}">
+                            <div class="card-header">
+                                <div class="card-number">${caso.numero}</div>
+                                <div class="card-sub">Caso real</div>
+                            </div>
+                            <div class="card-title">${caso.titulo}</div>
+                            <div class="case-description">${caso.descripcionCorta}</div>
+                            <div class="read-more">Ver análisis y lección</div>
+                        </div>
+                    `;
+                });
+
+                // Si no hay casos, mensaje
+                if (casosFiltrados.length === 0) {
+                    html = '<div style="padding: 30px; text-align: center; background: #eef3f9; border-radius: 24px;">No hay casos en esta categoría.</div>';
+                }
+
+                grid.innerHTML = html;
+
+                // Añadir evento click a cada tarjeta
+                document.querySelectorAll('.case-card').forEach(card => {
+                    card.addEventListener('click', function(e) {
+                        const id = parseInt(this.dataset.id);
+                        const caso = casos.find(c => c.id === id);
+                        if (caso) {
+                            // Remover clase selected de todas
+                            document.querySelectorAll('.case-card').forEach(c => c.classList.remove('selected'));
+                            this.classList.add('selected');
+
+                            // Mostrar detalle
+                            detailTitle.innerHTML = `${caso.titulo} <span>${caso.numero}</span>`;
+                            detailDescription.innerHTML = caso.detalle;
+                            detailPanel.classList.add('visible');
+                        }
+                    });
+                });
+
+                // Si no había caso seleccionado previamente, mantener panel con mensaje inicial
+                const algunaSeleccionada = document.querySelector('.case-card.selected');
+                if (!algunaSeleccionada) {
+                    // pero si hay tarjetas, seleccionar la primera por defecto? (opcional)
+                    // Por ahora dejamos el panel con el texto genérico y sin clase selected
+                    // pero para mejor UX, seleccionamos la primera:
+                    const primeraCard = document.querySelector('.case-card');
+                    if (primeraCard) {
+                        primeraCard.classList.add('selected');
+                        const primerId = parseInt(primeraCard.dataset.id);
+                        const primerCaso = casos.find(c => c.id === primerId);
+                        if (primerCaso) {
+                            detailTitle.innerHTML = `${primerCaso.titulo} <span>${primerCaso.numero}</span>`;
+                            detailDescription.innerHTML = primerCaso.detalle;
+                            detailPanel.classList.add('visible');
+                        }
+                    } else {
+                        detailPanel.classList.remove('visible');
+                    }
+                }
+            }
+
+            // Eventos de pestañas
+            tabButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    tabButtons.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    const filtro = this.dataset.tab;
+                    renderCasos(filtro);
+                });
+            });
+
+            // Render inicial (pestaña 'todos' activa)
+            renderCasos('todos');
+        })();
+    </script>
+
+    <!-- Pie de página opcional con estilo similar al sitio de ejemplo (no necesario, pero añade contexto) -->
+    <div style="margin-top: 20px; color: #cccccc; font-size: 0.9rem; text-align: center; max-width: 1100px;">
+        UDRP Domains defense team UCN · Asesoría en disputas de dominios y marcas
+    </div>
+</body>
+</html>
